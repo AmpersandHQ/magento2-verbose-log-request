@@ -1,0 +1,8 @@
+/vendor
+/.php_cs.cache
+/var
+/composer.lock
+/app
+/.phpunit.result.cache
+/.editorconfig
+/.idea

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- A preference for dev debug.log so we can conditionally enable / disable it per request -->
+    <!-- Some instances have this already enabled on production which can write a lot of data -->
+    <!-- This means if we wanted to add something particularly verbose to our code, we'd need a level below debug which does not exist -->
+    <!-- We can work around this by using the same logger handler for debug, but create a virtual type one which ONLY writes to debug when its purposefully injected -->
+    <preference for="Magento\Framework\Logger\Handler\Debug" type="Ampersand\VerboseLogRequest\Logger\Handler\Debug"/>
+
+    <!-- Create the virtual type which writes this log only if the flag is set -->
+    <virtualType name="Ampersand\VerboseLogRequest\Logger\Handler\Debug\VerboseDebugLogger" type="Ampersand\VerboseLogRequest\Logger\Handler\Debug">
+        <arguments>
+            <argument name="isVerboseLogVirtualType" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Ampersand\VerboseLogRequest\Logger\Handler\Debug\VerboseDebugLogger</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Make the cache decorator use the verbose logger -->
+    <type name="Ampersand\VerboseLogRequest\CacheDecorator\VerboseLogger">
+        <arguments>
+            <argument name="logger" xsi:type="object">Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="amp_verboselog_request_get_key" xsi:type="object">Ampersand\VerboseLogRequest\Console\Command\GetCurrentKeyCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

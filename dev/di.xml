@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- A preference for the db loggers so we can conditionally enable / disable it per request -->
+    <preference for="Magento\Framework\DB\LoggerInterface" type="Ampersand\VerboseLogRequest\Logger\DB\LoggerProxy"/>
+    <type name="Ampersand\VerboseLogRequest\Logger\DB\LoggerProxy">
+        <arguments>
+            <argument name="loggerAlias" xsi:type="string">disabled</argument>
+            <argument name="logAllQueries" xsi:type="boolean">true</argument>
+            <argument name="logQueryTime" xsi:type="number">0.001</argument>
+            <argument name="logCallStack" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+
+    <!--
+    Dump database logs triggered by this system into `./var/log/verbose_db.log`
+
+    Reasons
+    - Many systems wont have `./var/debug/db.log` in a symlinked place when autoscaling servers etc is concerned
+    - Log aggregation systems may not be set to look at `./var/debug` but may be configured to grab from `./var/log`
+    -->
+    <type name="Magento\Framework\DB\Logger\File">
+        <arguments>
+            <argument name="debugFile" xsi:type="string">log/verbose_db.log</argument>
+        </arguments>
+    </type>
+
+    <!-- Cache decorator for verbose cache read/write logging -->
+    <type name="Magento\Framework\App\Cache\Frontend\Factory">
+        <arguments>
+            <argument name="decorators" xsi:type="array">
+                <item name="verbose-log-cache" xsi:type="array">
+                    <item name="class" xsi:type="string">Ampersand\VerboseLogRequest\CacheDecorator\VerboseLogger</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
