@@ -11,6 +11,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 class IsVerbose
 {
     const HEADER_NAME = 'X-Verbose-Log';
+    const ENV_VAR_NAME = 'X_VERBOSE_LOG';
 
     /**
      * @var GetKey
@@ -44,7 +45,7 @@ class IsVerbose
             $isVerbose = $this->matchesKeyFromDeploymentConfig($keyFromHeader);
         }
 
-        $keyFromEnv = $request->getEnv(self::HEADER_NAME, '');
+        $keyFromEnv = $request->getServer(self::ENV_VAR_NAME, '');
         if (is_string($keyFromEnv) && strlen($keyFromEnv)) {
             $isVerbose = $this->matchesKeyFromDeploymentConfig($keyFromEnv);
         }

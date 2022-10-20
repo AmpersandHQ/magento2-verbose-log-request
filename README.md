@@ -33,6 +33,12 @@ Make a request to your desired page with an `X-Verbose-Log` header set to that v
 curl -H "X-Verbose-Log: d07c0ee76154d48c2974516ef22c1ec0" https://example.com/your-page/
 ```
 
+or 
+
+```
+X_VERBOSE_LOG=d07c0ee76154d48c2974516ef22c1ec0 php bin/magento some:command:here
+```
+
 See all your verbose log files
 ```shell
  12M var/log/debug.log

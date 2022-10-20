@@ -76,8 +76,8 @@ class IsVerboseTest extends TestCase
     {
         $request = $this->createMock(HttpRequest::class);
         $request->expects($this->once())
-            ->method('getEnv')
-            ->with(IsVerbose::HEADER_NAME, '')
+            ->method('getServer')
+            ->with(IsVerbose::ENV_VAR_NAME, '')
             ->willReturn($keyInEnv);
 
         $this->getKey->expects($this->exactly($keyInEnv ? 1 : 0))
