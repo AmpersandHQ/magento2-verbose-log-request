@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/AmpersandHQ/magento2-verbose-log-request.svg?token=4DzjEueYNQwZuk3ywXjG&branch=master)](https://app.travis-ci.com/AmpersandHQ/magento2-verbose-log-request)
 
-Enable database, debug log, and verbose logging for a specifically defined request.
+Dynamically change the log level per request to `DEBUG`. This enables database, debug log, and verbose logging for a specifically defined request.
 
 Pass in a `X-Verbose-Log` header and Magento will activate the kind of logging you usually only have in developer mode for that request. 
 
@@ -68,20 +68,28 @@ Update your `.gitignore` to ignore
 app/etc/di.xml_ampersand_magento2_verbose_log_request/di.xml
 ```
 
-## VerboseDebugLogger
-
-On some magento systems `debug` level logging may already be activated on some environments. 
-
-In this module I needed to also log `cache_load` and `cache_save` information to `debug.log` when the `X-Verbose-Log` flag is set, but there is no `->extraDebug` or `->verbose` function on `Psr\Log\LoggerInterface`. 
-
-I did not want to put this information directly into the main `debug` funtionality as on systems with this flag enabled they would get a LOT of extra log data every request, which goes against the idea of this module to only trigger this verbose information when it is needed.
-
-To handle this there is a virtual type `Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger` which can be injected into the classes you want, and the `->debug` calls for that logger interface will only trigger when the `ampersand/verbose_log_request/key` has been set for the request. 
-
-This allows us to do extra verbose `->debug` calls on specific classes, without flooding the log file for environments which already have the vanilla magento debug logging functionality enabled.
-
 ## Security considerations
 
 As all we are doing is writing to the log files the biggest "risk" is to your disk space. 
 
 However as you need to know the key to trigger the logging it can be locked down to your developers and won't be accessible to the outside world unless they already have access to your file system.
+
+## A log level below "debug", the VerboseDebugLogger
+
+By default magento has `debug` level logging enabled on `developer` mode and it may even be activated on some production environments. As we want to log `cache_load` and `cache_save` information this would rapidly fill up your log files on either your developer machine, or those production enivornments with lots of unnecessary data. 
+
+To ensure we only trigger these _extra verbose_ debug level logging when the `X-Verbose-Log` request is flagged, we have a virtual type that you can inject into your classes. 
+
+`Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger` will write to the `./var/log/debug.log` file the same as the standard calls to `->debug()`, but they will only write when flagged to in the request.
+
+In this manner we can spoof in a sort of log level below `DEBUG` as defined in [RFC 5424](https://www.rfc-editor.org/rfc/rfc5424). It is still a debug log, but it is only triggered when specifically requested and is therefore a bit separate from standard debug logs.
+
+You can tell your class to use this kind of debug logging by injecting it in place of the standard `\Psr\Log\LoggerInterface` by defining a `di.xml` like so
+
+```xml
+<type name="Namespace\Module\Your\Class\Here">
+    <arguments>
+        <argument name="logger" xsi:type="object">Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger</argument>
+    </arguments>
+</type>
+```
