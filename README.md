@@ -2,13 +2,18 @@
 
 [![Build Status](https://travis-ci.com/AmpersandHQ/magento2-verbose-log-request.svg?token=4DzjEueYNQwZuk3ywXjG&branch=master)](https://app.travis-ci.com/AmpersandHQ/magento2-verbose-log-request)
 
+## Summary
+
 Dynamically change the log level per request to `DEBUG`. This enables database, debug log, and verbose logging for a specifically defined request.
 
 Pass in a `X-Verbose-Log` header and Magento will activate the kind of logging you usually only have in developer mode for that request. 
 
 This means you can get verbose information when you are debugging something on production without having to switch on these settings forcefully. This is beneficial as on high traffic sites this can produce a lot of log data and narrowing in for what you are interested in can be difficult otherwise.
 
-Features
+It is recommended that you also install [ampersand/magento2-log-correlation-id](https://github.com/AmpersandHQ/magento2-log-correlation-id/) to help correlate your log entries together.
+
+## Fetaures
+
 - Database query (and stack trace) logging will be enabled and output to `./var/log/verbose_db.log`
   - https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/enable-logging.html#database-logging
   - See `src/Logger/DB/LoggerProxy.php`
