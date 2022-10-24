@@ -4,7 +4,7 @@
 
 ## Summary
 
-Dynamically change the log level per request to `DEBUG`. This enables database, debug log, and verbose logging for a specifically defined request.
+Dynamically change the [log level per request](https://devopedia.org/log-level-per-request) to `DEBUG`. This enables database, debug log, and verbose logging for a specifically defined request.
 
 Pass in a `X-Verbose-Log` header and Magento will activate the kind of logging you usually only have in developer mode for that request. 
 
