@@ -14,7 +14,7 @@ It is recommended that you also install [ampersand/magento2-log-correlation-id](
 
 Compatible with Magento 2.4.1 and higher.
 
-## Fetaures
+## Features
 
 - Database query (and stack trace) logging will be enabled and output to `./var/log/verbose_db.log`
   - https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/enable-logging.html#database-logging
@@ -28,10 +28,11 @@ Compatible with Magento 2.4.1 and higher.
 
 ## Example Usage
 
-On the system you want to debug run the following command to get the key for today
+On the system you want to debug run the following command to get the current key
 ```
 $ php bin/magento ampersand:verbose-log-request:get-key
-Todays key is : d07c0ee76154d48c2974516ef22c1ec0
+The current key is:               d07c0ee76154d48c2974516ef22c1ec0
+The current key will expire at:   2022-10-25 09:00:00
 ```
 
 Make a request to your desired page with an `X-Verbose-Log` header set to that value
