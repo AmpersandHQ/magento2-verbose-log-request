@@ -12,6 +12,8 @@ This means you can get verbose information when you are debugging something on p
 
 It is recommended that you also install [ampersand/magento2-log-correlation-id](https://github.com/AmpersandHQ/magento2-log-correlation-id/) to help correlate your log entries together.
 
+Compatible with Magento 2.4.1 and higher.
+
 ## Fetaures
 
 - Database query (and stack trace) logging will be enabled and output to `./var/log/verbose_db.log`
