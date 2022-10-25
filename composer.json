@@ -20,7 +20,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4||^8.1",
-        "magento/framework": ">=103.0.2",
+        "magento/framework": "*",
         "magento/magento-composer-installer": "*",
         "magento/module-developer": "*"
     },
