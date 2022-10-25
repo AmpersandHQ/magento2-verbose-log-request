@@ -117,7 +117,7 @@ class GetKeyTest extends TestCase
 
         // phpcs:ignore Magento2.Security.InsecureFunction
         $expectedKey = md5(
-            date("Y-m-d") .
+            date("Y-m-d-H") .
             json_encode(['some' => 'permutation', 'of' => 'database', 'values' => 'here']) .
             'some_good_key_from_deploy_config'
         );
