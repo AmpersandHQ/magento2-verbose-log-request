@@ -41,6 +41,7 @@ script:
     - composer run test-static-analysis
     - composer run test:unit
     # Install magento
+    - if [[ $TEST_GROUP = magento_242 ]];     then composer self-update --1; fi
     - if [[ $TEST_GROUP = magento_242 ]];     then NAME=ampmodule FULL_INSTALL=0 VERSION=2.4.1    . ./vendor/bin/travis-install-magento.sh; fi
     - if [[ $TEST_GROUP = magento_latest ]];  then NAME=ampmodule FULL_INSTALL=0                  . ./vendor/bin/travis-install-magento.sh; fi
     # Install this module
