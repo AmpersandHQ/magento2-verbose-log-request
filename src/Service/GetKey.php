@@ -23,14 +23,14 @@ class GetKey
     }
 
     /**
-     * Get todays key value for passing along in the header or env variable
+     * Get the current key value for passing along in the header or env variable
      *
      * Uses the following to generate a MD5
-     * 1. The generated value in config.php
+     * 1. The generated value added in config.php by src/Setup/Patch/Data/DevModeGenerateKey.php
      *    (something unique per project)
-     * 2. Some of the database deploy config information
-     *    (something unique per environment that is not visible to developers)
-     * 3. The current date
+     * 2. The database deploy config information (host/port/pass/etc)
+     *    (something unique per environment that is not usually visible to developers)
+     * 3. The current date and hour
      *    (so we have a moving target, and that we're protected against forgetting to unset the key in modheaders)
      *
      * This is not a super secret, all that it allows is the generation of dev level logging on an environment but we
@@ -56,7 +56,7 @@ class GetKey
 
         // not used for cryptographic purposes
         // phpcs:ignore Magento2.Security.InsecureFunction
-        $key = md5(date("Y-m-d") . json_encode($dbOptions) . $keyFromDeployConfig);
+        $key = md5(date("Y-m-d-H") . json_encode($dbOptions) . $keyFromDeployConfig);
         return $key;
     }
 }

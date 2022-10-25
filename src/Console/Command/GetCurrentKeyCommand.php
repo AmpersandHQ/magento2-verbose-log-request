@@ -45,12 +45,14 @@ class GetCurrentKeyCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $todaysKey = $this->getKey->execute();
-        if (!$todaysKey) {
-            $output->writeln('<error>Could not get todays key, is the deployment config readable?</error>');
+        $key = $this->getKey->execute();
+        $expireStamp = date('Y-m-d H', strtotime('now +1 hour')) . ':00:00';
+        if (!$key) {
+            $output->writeln('<error>Could not get the current key, is the deployment config readable?</error>');
             return 1;
         }
-        $output->writeln('<info>Todays key is : ' . $todaysKey . '</info>');
+        $output->writeln("<info>The current key is:               $key</info>");
+        $output->writeln("<info>The current key will expire at:   $expireStamp</info>");
         return 0;
     }
 }

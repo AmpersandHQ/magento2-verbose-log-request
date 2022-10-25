@@ -21,10 +21,11 @@ Features
 
 ## Example Usage
 
-On the system you want to debug run the following command to get the key for today
+On the system you want to debug run the following command to get the current key
 ```
 $ php bin/magento ampersand:verbose-log-request:get-key
-Todays key is : d07c0ee76154d48c2974516ef22c1ec0
+The current key is:               d07c0ee76154d48c2974516ef22c1ec0
+The current key will expire at:   2022-10-25 09:00:00
 ```
 
 Make a request to your desired page with an `X-Verbose-Log` header set to that value
