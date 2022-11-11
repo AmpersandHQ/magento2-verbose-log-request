@@ -101,3 +101,15 @@ You can tell your class to use this kind of debug logging by injecting it in pla
     </arguments>
 </type>
 ```
+
+### It's great for adding hotfix logging
+
+We all hope that it is never necessary but if you ever feel the need to add some hotfix logging onto an environment you can improve it by using the `VerboseDebugLogger`
+
+Inject that dependency (as described above) and you can put debug statements all through your application that will only trigger when you request it on the problematic environment
+
+```php
+    \Magento\Framework\App\ObjectManager::getInstance()
+        ->get(\Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger::class)
+        ->debug('My debug logging');
+```
