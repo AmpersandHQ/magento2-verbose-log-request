@@ -25,6 +25,9 @@ Compatible with Magento 2.4.1 and higher.
 - Bundled in this module is a cache decorator which will add to the vanilla offering of logging `cache_invalidate` with `cache_load` and `cache_save` information.
   - This uses a virtual type `Ampersand\VerboseLogRequest\Logger\VerboseDebugLogger` which calls to `->debug()` on the `Psr\Log\LoggerInterface`.
   - See `src/CacheDecorator/VerboseLogger.php`
+- Set redis log level to debug mode (level 7)
+  - Allows you to see redis locks etc 
+  - TODO cache log level as well as session log level
 
 ## Example Usage
 

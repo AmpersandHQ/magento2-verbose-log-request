@@ -41,4 +41,9 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="\Magento\Framework\Session\SaveHandler\Redis\Config">
+        <plugin name="ampersand_verboselogrequest_adjust_redis_log_level" type="\Ampersand\VerboseLogRequest\Plugin\AdjustRedisLogLevel" sortOrder="1" disabled="false" />
+    </type>
+
 </config>
