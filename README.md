@@ -29,6 +29,10 @@ Compatible with Magento 2.4.1 and higher.
   - Allows you to see redis lock acquisitions, lock waits, zombie processes, etc
   - https://github.com/colinmollenhour/Cm_RedisSession#configuration-example
 
+## Example Usage
+
+On the system you want to debug run the following command to get the current key
+
 ```
 $ php bin/magento ampersand:verbose-log-request:get-key
 The current key is:               d07c0ee76154d48c2974516ef22c1ec0
