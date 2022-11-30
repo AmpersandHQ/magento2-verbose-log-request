@@ -31,7 +31,7 @@ class AdjustRedisLogLevel
     public function afterGetLogLevel(RedisConfig $subject, $result)
     {
         if ($this->isVerbose->isVerbose()) {
-            return '7';
+            return '7777';
         }
         return $result;
     }
