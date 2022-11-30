@@ -31,7 +31,12 @@ class AdjustRedisLogLevel
     public function afterGetLogLevel(RedisConfig $subject, $result)
     {
         if ($this->isVerbose->isVerbose()) {
-            return '7777';
+            /**
+             * 7 (debug: the most information for development/testing)
+             *
+             * @link https://github.com/colinmollenhour/Cm_RedisSession#configuration-example
+             */
+            return '7';
         }
         return $result;
     }
