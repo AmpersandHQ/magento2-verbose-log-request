@@ -36,7 +36,7 @@ class AdjustRedisLogLevel
              *
              * @link https://github.com/colinmollenhour/Cm_RedisSession#configuration-example
              */
-            return '7';
+            return '77777';
         }
         return $result;
     }
