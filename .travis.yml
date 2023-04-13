@@ -1,69 +1,33 @@
-language: php
-php:
-    - 7.4
-    - 8.1
-git:
-  depth: false
-dist: xenial
-env:
-    - TEST_GROUP=magento_latest
-    - TEST_GROUP=magento_241
-jobs:
-    exclude:
-        -   php: 8.1
-            env: TEST_GROUP=magento_241
-        -   php: 7.4
-            env: TEST_GROUP=magento_latest
-
-addons:
-    apt:
-        packages:
-            - postfix
-            - apache2
-            - libapache2-mod-fastcgi
 services:
-    - mysql
-cache:
-    apt: true
-    directories:
-        - $HOME/.composer/cache
-        - $HOME/bin
+  - docker
+
+env:
+  - TEST_GROUP=2-4-1
+  - TEST_GROUP=2-latest
 
 before_install:
-    - if [ ! "$TRAVIS_PULL_REQUEST" = "false" ]; then git branch; git branch -D "$TRAVIS_BRANCH" || true; git checkout -b "$TRAVIS_BRANCH"; fi
-    - phpenv config-rm xdebug.ini || true
-    - composer self-update --2
+  - travis_retry wget https://github.com/docker/compose/releases/download/v2.17.0/docker-compose-linux-x86_64
+  - sudo mv docker-compose-linux-x86_64 /usr/libexec/docker/cli-plugins/docker-compose
+  - sudo chmod +x /usr/libexec/docker/cli-plugins/docker-compose
+  - docker --version && docker compose version
+  - composer self-update --2 && composer self-update --2.2
+
 install:
-    - export COMPOSER_MEMORY_LIMIT=-1
-    - export COMPOSER_PACKAGE_NAME=$(composer config name)
-    - composer install --no-interaction
+  - composer install --no-interaction
 script:
     - composer run test-static-analysis
     - composer run test:unit
     # Install magento
-    - if [[ $TEST_GROUP = magento_241 ]];     then composer self-update --1; fi
-    - if [[ $TEST_GROUP = magento_241 ]];     then NAME=ampmodule FULL_INSTALL=0 VERSION=2.4.1    . ./vendor/bin/travis-install-magento.sh; fi
-    - if [[ $TEST_GROUP = magento_latest ]];  then NAME=ampmodule FULL_INSTALL=0                  . ./vendor/bin/travis-install-magento.sh; fi
-    # Install this module
-    - cd vendor/ampersand/travis-vanilla-magento/instances/ampmodule
-    - composer config repo.ampmodule git "$TRAVIS_BUILD_DIR"
-    - composer require -vvv "$COMPOSER_PACKAGE_NAME:dev-$TRAVIS_BRANCH" || composer require -vvv "$COMPOSER_PACKAGE_NAME:$TRAVIS_BRANCH"
+    - CURRENT_EXTENSION="." vendor/bin/mtest-make $TEST_GROUP
     # Ensure magento composer installer is creating the di.xml file as necessary
-    - test -f app/etc/di.xml_ampersand_magento2_verbose_log_request/di.xml
-    # Configure for integration tests
-    - mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; DROP DATABASE IF EXISTS magento_integration_tests; CREATE DATABASE magento_integration_tests;'
-    - cp dev/tests/integration/etc/install-config-mysql.travis-no-rabbitmq.php.dist dev/tests/integration/etc/install-config-mysql.php
-    - php $TRAVIS_BUILD_DIR/dev/prepare_phpunit_config.php $TRAVIS_BUILD_DIR/vendor/ampersand/travis-vanilla-magento/instances/ampmodule
-    - vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml.dist --testsuite Integration --debug
-    # Test di compilation
-    - php bin/magento module:enable --all
-    - php bin/magento setup:di:compile
+    - vendor/bin/mtest 'test -f app/etc/di.xml_ampersand_magento2_verbose_log_request/di.xml'
+    # Integration tests
+    - vendor/bin/mtest "vendor/bin/phpunit -c /var/www/html/dev/tests/integration/phpunit.xml.dist --testsuite Integration --debug"
 
 after_failure:
-  - cd ./vendor/ampersand/travis-vanilla-magento/instances/ampmodule/
-  - for r in ./var/report/*; do cat $r; done
-  - for l in ./var/log/*;  do cat $l; done
-  - ls -l ./dev/tests/integration/tmp/sandbox*/var
-  - for r in ./dev/tests/integration/tmp/sandbox*/var/report/*; do cat $r; done
-  - for l in ./dev/tests/integration/tmp/sandbox*/var/log/*; do cat $l; done
+  - vendor/bin/mtest 'cat /var/www/html/var/log/*.log'
+  - vendor/bin/mtest 'for r in ./var/report/*; do cat $r; done'
+  - vendor/bin/mtest 'ls -l ./dev/tests/integration/tmp/sandbox*/var'
+  - vendor/bin/mtest 'for r in ./dev/tests/integration/tmp/sandbox*/var/report/*; do cat $r; done'
+  - vendor/bin/mtest 'for l in ./dev/tests/integration/tmp/sandbox*/var/log/*; do cat $l; done'
   - sleep 10;
