@@ -22,7 +22,7 @@ script:
     - composer run test-static-analysis
     - composer run test:unit
     # Install magento
-    - CURRENT_EXTENSION="." UNIT_TESTS_PATH='dev/Test/Unit' INTEGRATION_TESTS_PATH='dev/Test/Integration' vendor/bin/mtest-make $TEST_GROUP
+    - CURRENT_EXTENSION="." COMPOSER_MODULE_SYMLINK=0 UNIT_TESTS_PATH='dev/Test/Unit' INTEGRATION_TESTS_PATH='dev/Test/Integration' vendor/bin/mtest-make $TEST_GROUP
     # Ensure magento composer installer is creating the di.xml file as necessary
     - vendor/bin/mtest 'test -f app/etc/di.xml_ampersand_magento2_verbose_log_request/di.xml'
     # Integration tests

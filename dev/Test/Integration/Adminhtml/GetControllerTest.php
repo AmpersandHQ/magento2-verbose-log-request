@@ -6,9 +6,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 class GetControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    /**
-     * @magentoConfigFixture default/dev/template/allow_symlink 1
-     */
     public function testNotAllowed()
     {
         $allowedEmails = Bootstrap::getObjectManager()
@@ -18,9 +15,6 @@ class GetControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->assertRedirect($this->stringContains('admin/dashboard/index'));
     }
 
-    /**
-     * @depends testNotAllowed
-     */
     public function testAllowedEmail()
     {
         $emails = [
@@ -37,9 +31,6 @@ class GetControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->assertStringContainsString('The current key will expire at', $this->getResponse()->getBody());
     }
 
-    /**
-     * @depends testNotAllowed
-     */
     public function testAllowedDomain()
     {
         $domains = [
@@ -57,9 +48,6 @@ class GetControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->assertStringContainsString('The current key will expire at', $this->getResponse()->getBody());
     }
 
-    /**
-     * @depends testNotAllowed
-     */
     public function testAllowedEmailAndDomain()
     {
         $emails = [
