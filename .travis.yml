@@ -25,6 +25,8 @@ script:
     - CURRENT_EXTENSION="." vendor/bin/mtest-make $TEST_GROUP
     # Ensure magento composer installer is creating the di.xml file as necessary
     - vendor/bin/mtest 'test -f app/etc/di.xml_ampersand_magento2_verbose_log_request/di.xml'
+    - vendor/bin/mtest 'vendor/bin/n98-magerun2 config:store:set dev/template/allow_symlink 1'
+    - vendor/bin/mtest 'bin/magento cache:flush'
     # Integration tests
     - vendor/bin/mtest "vendor/bin/phpunit -c /var/www/html/dev/tests/integration/phpunit.xml.dist --testsuite Integration --debug"
 
