@@ -5,7 +5,7 @@
          stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <testsuites>
         <testsuite name="Ampersand Module Unit Test Suite">
-            <directory>src/Test/Unit</directory>
+            <directory>dev/Test/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>

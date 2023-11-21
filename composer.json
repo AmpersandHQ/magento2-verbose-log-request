@@ -65,6 +65,7 @@
         "phpunit/phpunit": "^9.5"
     },
     "extra": {
+        "magento-deploystrategy": "none",
         "magento-deploy-ignore": {
             "*": [
                 "/"

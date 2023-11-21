@@ -80,6 +80,26 @@ Update your `.gitignore` to ignore
 app/etc/di.xml_ampersand_magento2_verbose_log_request/di.xml
 ```
 
+If you want to give certain admin users permissions to get the key via the `Admin Panel -> Account Settings -> Get Verbose Log Key` create `app/etc/di.xml_ampersand_magento2_verbose_log_request/allowed_emails_di.xml` and define the allowed emails/domains. 
+
+```xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Ampersand\VerboseLogRequest\Service\Adminhtml\AllowedEmails">
+        <arguments>
+            <!-- It is recommended to allow specific emails -->
+            <argument name="allowedEmails" xsi:type="array">
+                <item name="1" xsi:type="string">example@firstexample.com</item>
+            </argument>
+            <!-- There is support for whitelisting a whole domain, but this is less strict than the above -->
+            <argument name="allowedDomains" xsi:type="array">
+                <item name="1" xsi:type="string">secondexample.com</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
+```
+
 ## Security considerations
 
 As all we are doing is writing to the log files the biggest "risk" is to your disk space. 

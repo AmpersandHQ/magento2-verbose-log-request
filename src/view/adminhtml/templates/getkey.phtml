@@ -1,0 +1,13 @@
+<?php /** @var $block \Ampersand\VerboseLogRequest\Block\Adminhtml\GetKey */?>
+<?php if ($block->isAllowed()): ?>
+    <?php
+        $key = $block->getKey();
+        $timestamp = $block->getTimestamp();
+    ?>
+    <?php if ($key): ?>
+            <p>The current key is:             <?= $block->escapeHtml($key) ?></p>
+            <p>The current key will expire at: <?= $block->escapeHtml($timestamp) ?></p>
+    <?php else: ?>
+            <p>Could not get the current key, is the deployment config readable?</p>
+    <?php endif; ?>
+<?php endif; ?>
