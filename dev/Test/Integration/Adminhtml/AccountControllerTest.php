@@ -6,6 +6,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 class AccountControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @magentoConfigFixture default/dev/template/allow_symlink 1
+     */
     public function testNotAllowed()
     {
         $allowedEmails = Bootstrap::getObjectManager()
@@ -16,6 +19,9 @@ class AccountControllerTest extends \Magento\TestFramework\TestCase\AbstractBack
         $this->assertStringNotContainsString('Get Verbose Log Key', $this->getResponse()->getBody());
     }
 
+    /**
+     * @depends testNotAllowed
+     */
     public function testAllowedEmail()
     {
         $emails = [
@@ -32,6 +38,9 @@ class AccountControllerTest extends \Magento\TestFramework\TestCase\AbstractBack
         $this->assertStringContainsString('Get Verbose Log Key', $this->getResponse()->getBody());
     }
 
+    /**
+     * @depends testNotAllowed
+     */
     public function testAllowedDomain()
     {
         $domains = [
@@ -49,6 +58,9 @@ class AccountControllerTest extends \Magento\TestFramework\TestCase\AbstractBack
         $this->assertStringContainsString('Get Verbose Log Key', $this->getResponse()->getBody());
     }
 
+    /**
+     * @depends testNotAllowed
+     */
     public function testAllowedEmailAndDomain()
     {
         $emails = [
