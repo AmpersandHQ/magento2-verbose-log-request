@@ -65,7 +65,7 @@ class VerboseLogger extends Bare
      *
      * @inheritDoc
      */
-    public function save($data, $identifier, array $tags = [], $lifeTime = null) // @phpstan-ignore-line
+    public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
         $result = parent::save($data, $identifier, $tags, $lifeTime);
         // Duplicate the inner `isVerbose` check so that this module can be installed without segfaulting
